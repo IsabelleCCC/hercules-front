@@ -1,0 +1,79 @@
+<app-menu></app-menu>
+
+<div class="d-flex flex-nowrap">
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="mb-4">Registrar treino</h2>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="workoutPlanForm" class="mb-4">
+          <label for="workout-plan" class="form-label">Selecione o plano de treino</label>
+          <select (change)="listExerciseWorkoutPlan(selectWorkoutPlan.value)" #selectWorkoutPlan formControlName="workoutPlan" class="form-select" aria-label="Selecionar plano de treino" id="workout-plan">
+            <option value="">Selecionar</option>
+            <option [value]="workoutPlan.id" *ngFor="let workoutPlan of workoutPlanList">{{ workoutPlan.name }}</option>
+          </select>
+        </form>
+
+        <h4>Exercícios</h4>
+
+        <div *ngFor="let exercise of exerciseWorkoutPlanList">
+          <div class="card bg-dark-1 mb-3 p-3 border-0">
+            <div class="d-flex justify-content-between place-center">
+              <div class="exercise-img"><fa-icon [icon]="['fas', 'dumbbell']"></fa-icon></div>
+              <h6 class="col-4">{{exercise.exercise_name}}</h6>
+              <div class="">
+                <span class="badge rounded-pill text-bg-warning px-3 py-2">{{exercise.sets}} séries</span>
+                <span class="badge rounded-pill text-bg-warning px-3 py-2 ms-1">{{exercise.reps}} repetições</span>
+              </div>
+              <button type="button" class="btn btn-success" (click)="openModalUpdate(update, exercise)"><fa-icon [icon]="['fas', 'pencil']"></fa-icon></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #update let-modal>
+  <form [formGroup]="setsForm" class="modal-content" id="setsForm" (submit)="insertWorkout()">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ exerciseWorkoutPlan?.exercise_name }}</h1>
+      <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+
+      <div class="mb-4">
+        <div formArrayName="setsArray" *ngFor="let set of getSets().controls; let i = index">
+          <div class="card bg-dark-1 p-3 border-0 mb-3" [formGroupName]="i">
+            <div class="d-flex justify-content-between">
+              <h6 class="fw-bold">Série {{ i+1 }}</h6>
+              <a href="#"><fa-icon [icon]="['far', 'trash-can']" style="color: #fe5050"></fa-icon></a>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-6">
+                <label for="reps" class="form-label">Repetições</label>
+                <input type="number" min="0" formControlName="reps" class="form-control" name="reps" id="reps" placeholder="Número de repetições">
+              </div>
+              <div class="col-sm-6">
+                <label for="max_weight" class="form-label">Carga máxima</label>
+                <input type="number" min="0" max="999" formControlName="max_weight" class="form-control" name="max_weight" id="max_weight"
+                  placeholder="Peso máximo em kg">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')"><fa-icon [icon]="['fas', 'xmark']"></fa-icon></button>
+      <button type="submit" form="setsForm" class="btn btn-primary"><fa-icon [icon]="['fas', 'check']"></fa-icon></button>
+    </div>
+  </form>
+</ng-template>

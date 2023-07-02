@@ -1,0 +1,53 @@
+<div class="vh-100 text-center">
+	<div class="container vertical-align">
+		<div class="row d-flex justify-content-center">
+			<div class="col-sm-12 col-md-8 col-lg-4 my-3">
+				<div class="card" id="card-login">
+					<div class="card-body">
+						<div class="d-flex justify-content-between place-center ps-2 pe-3">
+							<div class="text-start">
+								<img src="assets/logo.png" style="width: 5em;" draggable="false">
+							</div>
+							<div class="text-end">
+								<h3 class="brand">Hercules</h3>
+							</div>
+						</div>
+						<form [formGroup]="registerForm" (submit)="register(registerBtn)" class="card-body text-start">
+							<div class="col">
+								<label for="name" class="form-label">Nome</label>
+								<input formControlName="name" maxlength="100" name="name" type="text" class="form-control" id="name" placeholder="Nome completo">
+							</div>
+
+							<div class="col mt-3">
+								<label for="gender" class="form-label">Sexo</label>
+								<select formControlName="gender" name="gender" class="form-select" aria-label="Selecionar plano de treino" id="gender">
+									<option value="Feminino">Feminino</option>
+									<option value="Masculino">Masculino</option>
+								</select>
+							</div>
+
+							<div class="col mt-3">
+								<label for="birth_date" class="form-label">Data de nascimento</label>
+								<input formControlName="birth_date" name="birth_date" type="date" class="form-control" id="birth_date" placeholder="Número de repetições">
+							</div>
+
+							<div class="col mt-3">
+								<label for="email" class="form-label">E-mail</label>
+								<input formControlName="email" name="email" type="email" id="email" class="form-control" placeholder="Insira o e-mail">
+							</div>
+							<div class="col mt-3">
+								<label for="password" class="form-label">Senha</label>
+								<input formControlName="password" name="password" type="password" class="form-control" id="password" placeholder="Número de repetições">
+							</div>
+
+							<div class="text-end mt-3">
+								<button type="submit" #registerBtn class="btn btn-yellow"><fa-icon [icon]="['fas', 'check']" class="text-dark me-2"></fa-icon> Salvar</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>

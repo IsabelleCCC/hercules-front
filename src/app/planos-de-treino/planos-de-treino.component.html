@@ -1,0 +1,115 @@
+<app-menu></app-menu>
+
+<div class="d-flex flex-nowrap">
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="mb-4">Planos de Treino</h2>
+      </div>
+      <div class="col-md-6 text-end mb-3">
+        <button type="button" class="btn btn-yellow" (click)="openModal(workoutPlanModal, null)"><fa-icon [icon]="['fas', 'plus']" class="me-2" style="color: #000;"></fa-icon>Adicionar</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="mb-3 px-2">
+          <table class="table table-dark table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Data de Início</th>
+                <th scope="col">Data Final</th>
+                <th scope="col">Status</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let workoutPlan of workoutPlanList">
+              <tr>
+                <th scope="row">{{ workoutPlan.name }}</th>
+                <td>{{ workoutPlan.start_date }}</td>
+                <td>{{ workoutPlan.end_date }}</td>
+                <td>Ativo</td>
+                <td>
+                  <button type="button" class="btn btn-yellow" (click)="openModal(workoutPlanModal, workoutPlan)">
+                    <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                  </button>
+                  <button (click)="deleteWorkoutPlan($event, deleteWorkoutPlanBtn, workoutPlan.id)" #deleteWorkoutPlanBtn type="button" class="ms-2 btn btn-pink">
+                    <fa-icon [icon]="['fas', 'trash-can']" style="color: #fff"></fa-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #workoutPlanModal let-modal>
+  <form [formGroup]="workoutPlanForm" (submit)="submitWorkoutPlan()" class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="staticBackdropLabel">Inserir plano de treino</h1>
+      <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+
+      <label for="name" class="form-label">Nome</label>
+      <input required formControlName="name" type="text" class="form-control" id="name" maxlength="45" placeholder="Nome do plano de treino">
+
+      <div class="row mb-3">
+        <div class="col-sm-6 mt-3">
+          <label for="max_weight" class="form-label">Data de Início</label>
+          <input formControlName="start_date" type="date" class="form-control" id="start_date">
+        </div>
+        <div class="col-sm-6 mt-3">
+          <label for="reps" class="form-label">Data Final</label>
+          <input formControlName="end_date" type="date" class="form-control" id="end_date">
+        </div>
+      </div>
+
+      <div class="text-center mb-3">
+        <button type="button" class="btn btn-success">
+          <fa-icon [icon]="['fas', 'plus']" class="me-2"></fa-icon> Adicionar exercício
+        </button>
+      </div>
+
+      <div class="card bg-dark-1 px-3 pb-3 border-0 mb-3">
+        <div class="">
+          <div class="row">
+            <div class="col-sm-6 mt-3">
+              <label for="exercise" class="form-label">Exercício</label>
+              <select class="form-select" aria-label="Selecionar exercício" id="exercise">
+                <option selected>Selecionar</option>
+                <option [value]="exercise.id" *ngFor="let exercise of exerciseList">{{ exercise.name }}</option>
+              </select>
+            </div>
+            <div class="col-sm-6">
+              <label for="combination" class="form-label mt-3">Combinação</label>
+              <select class="form-select" aria-label="Selecionar combinação" id="combination">
+                <option selected>Selecionar</option>
+                <option [value]="exercise.id" *ngFor="let exercise of exerciseList">{{ exercise.name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6 mt-3">
+              <label for="max_weight" class="form-label">Séries</label>
+              <input type="number" class="form-control" name="max_weight" id="max_weight"
+                placeholder="Peso máximo em kg">
+            </div>
+            <div class="col-md-6 mt-3">
+              <label for="reps" class="form-label">Repetições</label>
+              <input type="number" class="form-control" name="reps" id="reps" placeholder="Número de repetições">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')"><fa-icon [icon]="['fas', 'xmark']"></fa-icon></button>
+      <button type="submit" class="btn btn-primary"><fa-icon [icon]="['fas', 'check']"></fa-icon></button>
+    </div>
+  </form>
+</ng-template>

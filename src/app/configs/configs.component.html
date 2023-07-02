@@ -1,0 +1,48 @@
+<app-menu></app-menu>
+<div class="d-flex flex-nowrap">
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="mb-4">Configurações de Usuário</h2>
+      </div>
+    </div>
+    <div class="card">
+      <form class="card-body">
+        <div class="col">
+          <label for="name" class="form-label">Nome</label>
+          <input type="number" class="form-control" id="name" placeholder="Número de repetições">
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mt-3">
+            <label for="gender" class="form-label">Selecione o sexo</label>
+            <select class="form-select" aria-label="Selecionar plano de treino" id="gender">
+              <option selected>Selecione</option>
+              <option value="Feminino">Feminino</option>
+              <option value="Masculino">Masculino</option>
+            </select>
+          </div>
+          <div class="col-md-6 mt-3">
+            <label for="birthdate" class="form-label">Data de nascimento</label>
+            <input type="date" class="form-control" id="birthdate" placeholder="Número de repetições">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mt-3">
+            <label for="email" class="form-label">E-mail</label>
+            <input type="email" id="email" class="form-control" placeholder="Insira o e-mail">
+          </div>
+          <div class="col-md-6 mt-3">
+            <label for="password" class="form-label">Senha</label>
+            <input type="password" class="form-control" id="password" placeholder="Número de repetições">
+          </div>
+        </div>
+
+        <div class="text-end mt-3">
+          <button class="btn btn-yellow"><i class="fa-solid fa-check text-dark me-2"></i>Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

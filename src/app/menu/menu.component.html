@@ -1,0 +1,40 @@
+
+<nav class="navbar bg-body-tertiary">
+  <div class="container">
+    <a class="navbar-brand" href="home.html">
+      <img src="assets/logo.png" alt="Bootstrap" width="60">
+      <span class="brand fs-2">Hercules</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+      aria-controls="offcanvasNavbar" aria-label="Toggle navigation" (click)="openEnd(content)">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!--off canvas menu -->
+    <ng-template #content let-offcanvas class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title mt-2"><img src="assets/logo.png" width="55px"></h5>
+        <button type="button" class="btn-close" (click)="offcanvas.dismiss('Cross click')" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/home"><fa-icon [icon]="['fas', 'house']" class="me-2" style="color: #e1e1e1;"></fa-icon>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/registrar-treino"><fa-icon [icon]="['fas', 'dumbbell']" class="me-2" style="color: #e1e1e1;"></fa-icon> Registrar treino</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/planos-de-treino"><fa-icon [icon]="['fas', 'list-ul']" class="me-2" style="color: #e1e1e1;"></fa-icon>Planos de treino</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/avaliacao-fisica"><fa-icon [icon]="['fas', 'child-reaching']" class="me-2" style="color: #e1e1e1;"></fa-icon>Avaliação física</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/configs"><fa-icon [icon]="['fas', 'gear']" class="me-2" style="color: #e1e1e1;"></fa-icon>Configurações</a>
+          </li>
+        </ul>
+      </div>
+    </ng-template>
+  </div>
+</nav>
