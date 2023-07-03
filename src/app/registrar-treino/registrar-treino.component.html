@@ -40,7 +40,7 @@
 
 
 <ng-template #update let-modal>
-  <form [formGroup]="setsForm" class="modal-content" id="setsForm" (submit)="insertWorkout()">
+  <form [formGroup]="setsForm" class="modal-content" id="setsForm" (submit)="insertWorkout(insertWorkoutBtn)">
     <div class="modal-header">
       <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ exerciseWorkoutPlan?.exercise_name }}</h1>
       <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')" aria-label="Close"></button>
@@ -73,7 +73,7 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')"><fa-icon [icon]="['fas', 'xmark']"></fa-icon></button>
-      <button type="submit" form="setsForm" class="btn btn-primary"><fa-icon [icon]="['fas', 'check']"></fa-icon></button>
+      <button #insertWorkoutBtn type="submit" form="setsForm" class="btn btn-primary"><fa-icon [icon]="['fas', 'check']"></fa-icon></button>
     </div>
   </form>
 </ng-template>

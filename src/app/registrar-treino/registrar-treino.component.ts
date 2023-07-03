@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import { WorkoutModel } from '../models/workout.model';
 import { WorkoutService } from '../services/workout.service';
 import { Toast } from '../helpers/toast';
+import { ButtonLoading } from '../helpers/button-loading';
 
 @Component({
   selector: 'app-registrar-treino',
@@ -161,7 +162,8 @@ export class RegistrarTreinoComponent {
     return this.setsForm.get('setsArray') as FormArray
   }
 
-  insertWorkout(): void {
+  insertWorkout(button: HTMLButtonElement): void {
+    const loading = new ButtonLoading(button);
     this.setsForm.markAllAsTouched()
 
     if (this.setsForm.invalid) {
@@ -170,6 +172,8 @@ export class RegistrarTreinoComponent {
         "Valores inseridos inválidos.",
         "error"
       );
+      loading.remove()
+      return
     }
 
     this.setsForm.disable()
@@ -191,7 +195,7 @@ export class RegistrarTreinoComponent {
         Swal.fire({
           icon: "success",
           title: "Exercício inserido"
-        });
+        }).then(() => this.modalService.dismissAll())
       },
 
       error: (error: HttpErrorResponse) => {
@@ -202,11 +206,14 @@ export class RegistrarTreinoComponent {
               "Algo inesperado aconteceu, tente novamente mais tarde.",
               "error"
             );
+            loading.remove()
             break;
         }
       }
 
+    }).add(() => {
+      this.setsForm.enable()
+      loading.remove()
     })
   }
-
 }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-configs',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./configs.component.css']
 })
 export class ConfigsComponent {
-
+  // public userForm : FormGroup
 }

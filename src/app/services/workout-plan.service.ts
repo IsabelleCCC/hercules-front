@@ -18,8 +18,8 @@ export class WorkoutPlanService {
 		return this.http.get<WorkoutPlan>(`${environment.baseURI.api}/workout-plan/${id}`);
 	}
 
-  insertWorkoutPlan(body: InsertWorkoutPlan): Observable<WorkoutPlan> {
-    return this.http.post<WorkoutPlan>(`${environment.baseURI.api}/workout-plan`, body)
+  insertWorkoutPlan(body: WorkoutPlanWithExerciseWorkoutPlan): Observable<WorkoutPlanWithExerciseWorkoutPlan> {
+    return this.http.post<WorkoutPlanWithExerciseWorkoutPlan>(`${environment.baseURI.api}/workout-plan`, body)
   }
 
   deleteWorkoutPlan(id: number): Observable<any> {
