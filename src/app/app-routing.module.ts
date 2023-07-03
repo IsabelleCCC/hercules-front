@@ -9,6 +9,7 @@ import { RegistrarTreinoComponent } from './registrar-treino/registrar-treino.co
 import { AvaliacaoFisicaComponent } from './avaliacao-fisica/avaliacao-fisica.component';
 
 const routes: Routes = [
+  { path: '', component: LoginComponent},
   { path: 'login', component: LoginComponent},
   { path: 'cadastro', component: CadastroComponent},
   { path: 'home', component: HomeComponent},

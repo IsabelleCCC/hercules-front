@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ButtonLoading } from '../helpers/button-loading';
-import { Register } from '../models/register.model';
+import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -59,7 +59,7 @@ export class CadastroComponent {
 
     this.registerForm.disable();
 
-    const body: Register = {
+    const body: User = {
       email: this.registerFormControls['email'].value,
       password: this.registerFormControls['password'].value,
       name: this.registerFormControls['name'].value,
@@ -68,7 +68,7 @@ export class CadastroComponent {
     }
 
     this.userService.register(body).subscribe({
-      next: (response: Register) => {
+      next: (response: User) => {
         Swal.fire(
           "Sucesso",
           "Cadastro realizado com sucesso, faça o login.",
