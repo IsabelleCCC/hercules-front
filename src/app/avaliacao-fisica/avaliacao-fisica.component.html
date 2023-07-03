@@ -7,8 +7,7 @@
         <h2 class="mb-4">Avaliação Física</h2>
       </div>
       <div class="col-md-6 text-end mb-3">
-        <button type="button" class="btn btn-yellow" (click)="openModalInsert(insert)"><i
-            class="fa-solid fa-plus me-2" style="color: #000;"></i>Adicionar</button>
+        <button type="button" class="btn btn-yellow" (click)="openModalInsert(insert)"><fa-icon [icon]="['fas', 'plus']" class="me-2" style="color: #000;"></fa-icon>Adicionar</button>
       </div>
     </div>
     <div class="card">
@@ -29,8 +28,8 @@
                 <td>65</td>
                 <td>25%</td>
                 <td>
-                  <button type="button" class="btn btn-yellow" (click)="openModalUpdate(update)"><i class="fa-solid fa-pencil text-dark"></i></button>
-                  <button type="button" class="ms-2 btn btn-pink"><i class="fa-solid fa-trash-can"></i></button>
+                  <button type="button" class="btn btn-yellow" (click)="openModalUpdate(update)"><fa-icon [icon]="['fas', 'pencil']"></fa-icon></button>
+                  <button type="button" class="ms-2 btn btn-pink"><fa-icon [icon]="['fas', 'trash-can']" style="color: #fff"></fa-icon></button>
                 </td>
               </tr>
               <tr>
@@ -39,8 +38,8 @@
                 <td>25%</td>
                 <td>
                   <button type="button" class="btn btn-yellow" data-bs-toggle="modal"
-                    data-bs-target="#modalEdit"><i class="fa-solid fa-pencil text-dark"></i></button>
-                  <button type="button" class="ms-2 btn btn-pink"><i class="fa-solid fa-trash-can"></i></button>
+                    data-bs-target="#modalEdit"><fa-icon [icon]="['fas', 'pencil']"></fa-icon></button>
+                  <button type="button" class="ms-2 btn btn-pink"><fa-icon [icon]="['fas', 'trash-can']" style="color: #fff"></fa-icon></button>
                 </td>
               </tr>
             </tbody>
