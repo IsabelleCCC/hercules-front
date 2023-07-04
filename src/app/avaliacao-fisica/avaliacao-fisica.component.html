@@ -7,7 +7,7 @@
         <h2 class="mb-4">Avaliação Física</h2>
       </div>
       <div class="col-md-6 text-end mb-3">
-        <button type="button" class="btn btn-yellow" (click)="openModal(modal)"><fa-icon [icon]="['fas', 'plus']" class="me-2" style="color: #000;"></fa-icon>Adicionar</button>
+        <button type="button" class="btn btn-yellow" (click)="openModal(modal, null)"><fa-icon [icon]="['fas', 'plus']" class="me-2" style="color: #000;"></fa-icon>Adicionar</button>
       </div>
     </div>
     <div class="card">
@@ -28,7 +28,7 @@
                 <td>{{ fitnessTest.weight }}</td>
                 <td>{{ fitnessTest.body_fat }}%</td>
                 <td>
-                  <button type="button" class="btn btn-yellow" (click)="openModal(modal)"><fa-icon [icon]="['fas', 'pencil']"></fa-icon></button>
+                  <button type="button" class="btn btn-yellow" (click)="openModal(modal, fitnessTest)"><fa-icon [icon]="['fas', 'pencil']"></fa-icon></button>
                   <button (click)="deleteFitnessTest($event, deleteBtn, fitnessTest.id)" #deleteBtn type="button" class="ms-2 btn btn-pink"><fa-icon [icon]="['fas', 'trash-can']" style="color: #fff"></fa-icon></button>
                 </td>
               </tr>
@@ -161,7 +161,7 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')"><fa-icon [icon]="['fas', 'xmark']"></fa-icon></button>
-      <button #fitnessTestBtn type="submit" class="btn btn-primary"><fa-icon [icon]="['fas', 'check']"></fa-icon></button>
+      <button #fitnessTestBtn type="submit" [disabled]="fitnessTestForm.disabled" class="btn btn-primary"><fa-icon [icon]="['fas', 'check']"></fa-icon></button>
     </div>
   </form>
 </ng-template>

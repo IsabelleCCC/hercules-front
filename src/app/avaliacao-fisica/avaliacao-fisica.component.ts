@@ -104,7 +104,6 @@ export class AvaliacaoFisicaComponent {
     this.fitnessTestService.list(this.authService.userId).subscribe({
       next: (response: GetFitnessTest[]) => {
         this.fitnessTestList = response
-        console.log(response)
       },
       error: (error: HttpErrorResponse) => {
         switch (error.error.detail) {
@@ -120,16 +119,22 @@ export class AvaliacaoFisicaComponent {
     })
   }
 
-  openModal(content: TemplateRef<any>) {
+  openModal(content: TemplateRef<any>, fitnessTest: GetFitnessTest | null) {
+    this.fitnessTestForm.reset()
 		this.modalService.open(content, { centered: true, scrollable: true });
 
+    if (fitnessTest != null) {
+        this.fitnessTestForm.patchValue(fitnessTest)
+        this.fitnessTestForm.disable()
+    }else {
+      this.fitnessTestForm.enable()
+    }
 	}
 
   setPage() {
 		this.fitnessTestService.list(this.authService.userId).subscribe({
       next: (response: GetFitnessTest[]) => {
         this.fitnessTestList = response
-        console.log(response)
       },
       error: () => {
           Swal.fire(
