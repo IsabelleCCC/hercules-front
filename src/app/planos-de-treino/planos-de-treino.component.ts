@@ -208,14 +208,11 @@ export class PlanosDeTreinoComponent {
 						this.setPage();
 					},
 					error: (error: HttpErrorResponse) => {
-						switch(error.error.message) {
-							case "invalidForecast":
-								this.setPage();
-								break;
+						switch(error.error.detail) {
 							default:
 								Swal.fire(
 									"Ocorreu um erro",
-									"Algo inesperado aconteceu, tente novamente mais tarde",
+									"Não foi possível deletar.",
 									"error"
 								);
 								break;

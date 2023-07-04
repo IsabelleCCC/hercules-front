@@ -30,7 +30,7 @@ export class RegistrarTreinoComponent {
   public setsForm: FormGroup
 
   public workoutPlanList: WorkoutPlan[] = []
-  public exerciseWorkoutPlanList?: ExerciseWorkoutPlanEdited[]
+  public exerciseWorkoutPlanList: ExerciseWorkoutPlanEdited[] = []
   public exerciseWorkoutPlan?: ExerciseWorkoutPlanEdited
 
   public Count = []

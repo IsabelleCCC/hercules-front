@@ -19,18 +19,25 @@
 
         <h4>Exercícios</h4>
 
-        <div *ngFor="let exercise of exerciseWorkoutPlanList">
-          <div class="card bg-dark-1 mb-3 p-3 border-0">
-            <div class="d-flex justify-content-between place-center">
-              <div class="exercise-img"><fa-icon [icon]="['fas', 'dumbbell']"></fa-icon></div>
-              <h6 class="col-4">{{exercise.exercise_name}}</h6>
-              <div class="">
-                <span class="badge rounded-pill text-bg-warning px-3 py-2">{{exercise.sets}} séries</span>
-                <span class="badge rounded-pill text-bg-warning px-3 py-2 ms-1">{{exercise.reps}} repetições</span>
+        <div *ngIf="exerciseWorkoutPlanList.length > 0">
+          <div *ngFor="let exercise of exerciseWorkoutPlanList">
+            <div class="card bg-dark-1 mb-3 p-3 border-0">
+              <div class="d-flex justify-content-between place-center">
+                <div class="exercise-img"><fa-icon [icon]="['fas', 'dumbbell']"></fa-icon></div>
+                <h6 class="col-4">{{exercise.exercise_name}}</h6>
+                <div class="">
+                  <span class="badge rounded-pill text-bg-warning px-3 py-2">{{exercise.sets}} séries</span>
+                  <span class="badge rounded-pill text-bg-warning px-3 py-2 ms-1">{{exercise.reps}} repetições</span>
+                </div>
+                <button type="button" class="btn btn-success" (click)="openModalUpdate(update, exercise)"><fa-icon [icon]="['fas', 'pencil']"></fa-icon></button>
               </div>
-              <button type="button" class="btn btn-success" (click)="openModalUpdate(update, exercise)"><fa-icon [icon]="['fas', 'pencil']"></fa-icon></button>
             </div>
           </div>
+        </div>
+
+        <div *ngIf="exerciseWorkoutPlanList.length == 0" class="text-center">
+          <img src="../../assets/workout.svg" style="max-width: 300px;"/>
+          <p class="fs-5 mt-2">Nenhum exercício por aqui</p>
         </div>
 
       </div>
