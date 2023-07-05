@@ -60,6 +60,7 @@ export class PlanosDeTreinoComponent {
 
 
   openModal(content: TemplateRef<any>, workoutPlan: WorkoutPlan | null) {
+    this.workoutPlanForm.reset()
     this.getExercisesWorkoutPlan().controls = []
 		this.modalService.open(content, { centered: true, scrollable: true });
 
@@ -69,8 +70,8 @@ export class PlanosDeTreinoComponent {
           element.combination = 0
         }
         this.addExerciseWorkoutPlan()
-        this.workoutPlanForm.patchValue(workoutPlan)
       });
+      this.workoutPlanForm.patchValue(workoutPlan)
     }
 
     this.selectedWorkoutPlan = workoutPlan
@@ -132,7 +133,7 @@ export class PlanosDeTreinoComponent {
         element.combination = null
       }
     });
-
+    console.log(this.workoutPlanForm.value)
     this.workoutPlanService.insertWorkoutPlan(this.workoutPlanForm.value).subscribe({
       next: (response: WorkoutPlanWithExerciseWorkoutPlan) => {
         Swal.fire({

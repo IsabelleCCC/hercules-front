@@ -13,33 +13,41 @@
     <div class="card">
       <div class="card-body">
         <div class="mb-3 px-2">
-          <table class="table table-dark table-striped">
-            <thead>
-              <tr>
-                <th scope="col">Nome</th>
-                <th scope="col">Data de Início</th>
-                <th scope="col">Data Final</th>
-                <th scope="col">Status</th>
-                <th scope="col">Ações</th>
-              </tr>
-            </thead>
-            <tbody *ngFor="let workoutPlan of workoutPlanList">
-              <tr>
-                <th scope="row">{{ workoutPlan.name }}</th>
-                <td>{{ workoutPlan.start_date }}</td>
-                <td>{{ workoutPlan.end_date }}</td>
-                <td>Ativo</td>
-                <td>
-                  <button type="button" class="btn btn-yellow" (click)="openModal(workoutPlanModal, workoutPlan)">
-                    <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
-                  </button>
-                  <button (click)="deleteWorkoutPlan($event, deleteWorkoutPlanBtn, workoutPlan.id)" #deleteWorkoutPlanBtn type="button" class="ms-2 btn btn-pink">
-                    <fa-icon [icon]="['fas', 'trash-can']" style="color: #fff"></fa-icon>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+
+          <div *ngIf="workoutPlanList.length > 0">
+            <table class="table table-dark table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Nome</th>
+                  <th scope="col">Data de Início</th>
+                  <th scope="col">Data Final</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody *ngFor="let workoutPlan of workoutPlanList">
+                <tr>
+                  <th scope="row">{{ workoutPlan.name }}</th>
+                  <td>{{ workoutPlan.start_date }}</td>
+                  <td>{{ workoutPlan.end_date }}</td>
+                  <td>Ativo</td>
+                  <td>
+                    <button type="button" class="btn btn-yellow" (click)="openModal(workoutPlanModal, workoutPlan)">
+                      <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                    </button>
+                    <button (click)="deleteWorkoutPlan($event, deleteWorkoutPlanBtn, workoutPlan.id)" #deleteWorkoutPlanBtn type="button" class="ms-2 btn btn-pink">
+                      <fa-icon [icon]="['fas', 'trash-can']" style="color: #fff"></fa-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div *ngIf="workoutPlanList.length == 0" class="text-center">
+            <img src="../../assets/workout.svg" style="max-width: 300px;"/>
+            <p class="fs-5 mt-2">Nenhum plano de treino ainda</p>
+          </div>
 
         </div>
       </div>
@@ -96,7 +104,7 @@
             <div class="col-md-6 mt-3">
               <label for="sets" class="form-label">Séries</label>
               <input formControlName="sets" type="number" class="form-control" name="sets"
-                placeholder="Peso máximo em kg">
+                placeholder="Quantidade de séries">
             </div>
             <div class="col-md-6 mt-3">
               <label for="reps" class="form-label">Repetições</label>
