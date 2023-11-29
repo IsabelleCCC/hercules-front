@@ -5,17 +5,20 @@ import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
   closeResult?: string;
 
-  constructor(private offcanvasService: NgbOffcanvas, private router: Router, private route: ActivatedRoute) {
-    this.router.navigate(["/registrar-treino"])
-  }
+  constructor(
+    private offcanvasService: NgbOffcanvas,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   openEnd(content: TemplateRef<any>) {
-		this.offcanvasService.open(content, { position: 'end' });
-	}
+    this.offcanvasService.open(content, { position: 'end' });
+  }
 
+  ngOnInit() {}
 }

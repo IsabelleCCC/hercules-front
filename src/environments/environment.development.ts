@@ -1,5 +1,5 @@
 export const environment = {
   baseURI: {
-    api: 'https://hercules-api-gateway.azure-api.net'
-  }
+    api: 'http://127.0.0.1:8000',
+  },
 };
