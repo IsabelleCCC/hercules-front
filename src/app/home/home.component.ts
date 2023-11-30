@@ -14,11 +14,11 @@ export class HomeComponent {
     private offcanvasService: NgbOffcanvas,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.router.navigate(['/registrar-treino']);
+  }
 
   openEnd(content: TemplateRef<any>) {
     this.offcanvasService.open(content, { position: 'end' });
   }
-
-  ngOnInit() {}
 }
