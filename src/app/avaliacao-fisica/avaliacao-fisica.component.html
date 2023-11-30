@@ -7,13 +7,27 @@
         <h2 class="mb-4">Avaliação Física</h2>
       </div>
       <div class="col-md-6 text-end mb-3">
-        <button type="button" class="btn btn-yellow" (click)="openModal(modal, null)"><fa-icon [icon]="['fas', 'plus']" class="me-2" style="color: #000;"></fa-icon>Adicionar</button>
+        <button
+          type="button"
+          class="btn btn-yellow"
+          (click)="openModal(modal, null)"
+        >
+          <fa-icon
+            [icon]="['fas', 'plus']"
+            class="me-2"
+            style="color: #000"
+          ></fa-icon
+          >Adicionar
+        </button>
       </div>
     </div>
     <div class="card">
       <div class="card-body">
         <div class="mb-3 px-2">
-          <table *ngIf="fitnessTestList.length > 0" class="table table-dark table-striped">
+          <table
+            *ngIf="fitnessTestList.length > 0"
+            class="table table-dark table-striped"
+          >
             <thead>
               <tr>
                 <th scope="col">Data</th>
@@ -24,19 +38,39 @@
             </thead>
             <tbody *ngFor="let fitnessTest of fitnessTestList">
               <tr>
-                <th scope="row">{{ fitnessTest.date }}</th>
+                <th scope="row">
+                  {{ fitnessTest.date | date : "dd/MM/yyyy" }}
+                </th>
                 <td>{{ fitnessTest.weight }}</td>
                 <td>{{ fitnessTest.body_fat }}%</td>
                 <td>
-                  <button type="button" class="btn btn-yellow" (click)="openModal(modal, fitnessTest)"><fa-icon [icon]="['fas', 'pencil']"></fa-icon></button>
-                  <button (click)="deleteFitnessTest($event, deleteBtn, fitnessTest.id)" #deleteBtn type="button" class="ms-2 btn btn-pink"><fa-icon [icon]="['fas', 'trash-can']" style="color: #fff"></fa-icon></button>
+                  <button
+                    type="button"
+                    class="ms-2 mt-1 btn btn-yellow"
+                    (click)="openModal(modal, fitnessTest)"
+                  >
+                    <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                  </button>
+                  <button
+                    (click)="
+                      deleteFitnessTest($event, deleteBtn, fitnessTest.id)
+                    "
+                    #deleteBtn
+                    type="button"
+                    class="ms-2 mt-1 btn btn-pink"
+                  >
+                    <fa-icon
+                      [icon]="['fas', 'trash-can']"
+                      style="color: #fff"
+                    ></fa-icon>
+                  </button>
                 </td>
               </tr>
             </tbody>
           </table>
 
           <div *ngIf="fitnessTestList.length == 0" class="text-center">
-            <img src="../../assets/workout.svg" style="max-width: 300px;"/>
+            <img src="../../assets/workout.svg" style="max-width: 300px" />
             <p class="fs-5 mt-2">Nenhuma avaliação física registrada</p>
           </div>
         </div>
@@ -45,123 +79,248 @@
   </div>
 </div>
 
-
 <ng-template #modal let-modal>
-  <form [formGroup]="fitnessTestForm" (submit)="insertFitnessTest(fitnessTestBtn)" class="modal-content">
+  <form
+    [formGroup]="fitnessTestForm"
+    (submit)="insertFitnessTest(fitnessTestBtn)"
+    class="modal-content"
+  >
     <div class="modal-header">
       <h1 class="modal-title fs-5" id="modalNewLabel">Avaliação Física</h1>
-      <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')" aria-label="Close"></button>
+      <button
+        type="button"
+        class="btn-close"
+        (click)="modal.dismiss('Cross click')"
+        aria-label="Close"
+      ></button>
     </div>
     <div class="modal-body bg-dark-1">
-
-      <div class="row mb-3">
+      <div class="row mb-2">
         <div class="col-md-6 mt-2">
           <label for="weight" class="form-label">Peso</label>
-          <input type="number" class="form-control" formControlName="weight" placeholder="Peso em kg">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="weight"
+            placeholder="Peso em kg"
+          />
         </div>
         <div class="col-md-6 mt-2">
           <label for="body_fat" class="form-label">Percentual de gordura</label>
-          <input type="number" class="form-control" formControlName="body_fat" placeholder="% de gordura corporal">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="body_fat"
+            placeholder="% de gordura corporal"
+          />
         </div>
       </div>
 
-      <div class="row mb-3">
+      <div class="row mb-2">
         <div class="col-md-6 mt-2">
           <label for="chest" class="form-label">Tórax</label>
-          <input type="number" class="form-control" formControlName="chest" placeholder="Medida em cm">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="chest"
+            placeholder="Medida em cm"
+          />
         </div>
         <div class="col-md-6 mt-2">
-          <label for="right_arm_contr" class="form-label">Braço direito contraído</label>
-          <input type="number" class="form-control" formControlName="right_arm_contr" placeholder="Medida em cm">
+          <label for="right_arm_contr" class="form-label"
+            >Braço direito contraído</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            formControlName="right_arm_contr"
+            placeholder="Medida em cm"
+          />
         </div>
       </div>
 
-      <div class="row mb-3">
+      <div class="row mb-2">
         <div class="col-md-6 mt-2">
-          <label for="left_arm_contr" class="form-label">Braço esquerdo contraído</label>
-          <input type="number" class="form-control" formControlName="left_arm_contr" placeholder="Medida em cm">
+          <label for="left_arm_contr" class="form-label"
+            >Braço esquerdo contraído</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            formControlName="left_arm_contr"
+            placeholder="Medida em cm"
+          />
         </div>
         <div class="col-md-6 mt-2">
           <label for="hip" class="form-label">Quadril</label>
-          <input type="number" class="form-control" formControlName="hip" placeholder="Medida em cm">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="hip"
+            placeholder="Medida em cm"
+          />
         </div>
       </div>
 
-      <div class="row mb-3">
+      <div class="row mb-2">
         <div class="col-md-6 mt-2">
-          <label for="right_arm_relax" class="form-label">Braço direito relaxado</label>
-          <input type="number" class="form-control" formControlName="right_arm_relax" placeholder="Medida em cm">
+          <label for="right_arm_relax" class="form-label"
+            >Braço direito relaxado</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            formControlName="right_arm_relax"
+            placeholder="Medida em cm"
+          />
         </div>
         <div class="col-md-6 mt-2">
-          <label for="left_arm_relax" class="form-label">Braço esquerdo relaxado</label>
-          <input type="number" class="form-control" formControlName="left_arm_relax" placeholder="Medida em cm">
+          <label for="left_arm_relax" class="form-label"
+            >Braço esquerdo relaxado</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            formControlName="left_arm_relax"
+            placeholder="Medida em cm"
+          />
         </div>
       </div>
 
-      <div class="row mb-3">
+      <div class="row mb-2">
         <div class="col-md-6 mt-2">
           <label for="abdomen" class="form-label">Abdômem</label>
-          <input type="number" class="form-control" formControlName="abdomen" placeholder="Medida em cm">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="abdomen"
+            placeholder="Medida em cm"
+          />
         </div>
         <div class="col-md-6 mt-2">
           <label for="waist" class="form-label">Cintura</label>
-          <input type="number" class="form-control" formControlName="waist" placeholder="Medida em cm">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="waist"
+            placeholder="Medida em cm"
+          />
         </div>
       </div>
 
-      <div class="row mb-3">
+      <div class="row mb-2">
         <div class="col-md-6 mt-2">
-          <label for="right_forearm" class="form-label">Antebraço direito</label>
-          <input type="number" class="form-control" formControlName="right_forearm" placeholder="Medida em cm">
+          <label for="right_forearm" class="form-label"
+            >Antebraço direito</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            formControlName="right_forearm"
+            placeholder="Medida em cm"
+          />
         </div>
         <div class="col-md-6 mt-2">
-          <label for="left_forearm" class="form-label">Antebraço esquerdo</label>
-          <input type="number" class="form-control" formControlName="left_forearm" placeholder="Medida em cm">
+          <label for="left_forearm" class="form-label"
+            >Antebraço esquerdo</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            formControlName="left_forearm"
+            placeholder="Medida em cm"
+          />
         </div>
       </div>
 
-      <div class="row mb-3">
+      <div class="row mb-2">
         <div class="col-md-6 mt-2">
           <label for="right_thigh" class="form-label">Coxa direita</label>
-          <input type="number" class="form-control" formControlName="right_thigh" placeholder="Medida em cm">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="right_thigh"
+            placeholder="Medida em cm"
+          />
         </div>
         <div class="col-md-6 mt-2">
           <label for="left_thigh" class="form-label">Coxa esquerda</label>
-          <input type="number" class="form-control" formControlName="left_thigh" placeholder="Medida em cm">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="left_thigh"
+            placeholder="Medida em cm"
+          />
         </div>
       </div>
 
-      <div class="row mb-3">
+      <div class="row mb-2">
         <div class="col-md-6 mt-2">
           <label for="scapular" class="form-label">Cintura escapular</label>
-          <input type="number" class="form-control" formControlName="scapular" placeholder="Medida em cm">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="scapular"
+            placeholder="Medida em cm"
+          />
         </div>
         <div class="col-md-6 mt-2">
           <label for="left_thigh" class="form-label">Coxa esquerda</label>
-          <input type="number" class="form-control" formControlName="left_thigh" placeholder="Medida em cm">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="left_thigh"
+            placeholder="Medida em cm"
+          />
         </div>
       </div>
 
-      <div class="row mb-3">
+      <div class="row mb-2">
         <div class="col-md-6 mt-2">
           <label for="right_calf" class="form-label">Panturrilha direita</label>
-          <input type="number" class="form-control" formControlName="right_calf" placeholder="Medida em cm">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="right_calf"
+            placeholder="Medida em cm"
+          />
         </div>
         <div class="col-md-6 mt-2">
           <label for="left_calf" class="form-label">Panturrilha direita</label>
-          <input type="number" class="form-control" formControlName="left_calf" placeholder="Medida em cm">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="left_calf"
+            placeholder="Medida em cm"
+          />
         </div>
       </div>
 
       <div class="form-floating mt-4">
-        <textarea class="form-control" placeholder="Observações" formControlName="observations"></textarea>
+        <textarea
+          class="form-control"
+          placeholder="Observações"
+          formControlName="observations"
+        ></textarea>
         <label for="observations">Observações</label>
       </div>
-
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')"><fa-icon [icon]="['fas', 'xmark']"></fa-icon></button>
-      <button #fitnessTestBtn type="submit" [disabled]="fitnessTestForm.disabled" class="btn btn-primary"><fa-icon [icon]="['fas', 'check']"></fa-icon></button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <fa-icon [icon]="['fas', 'xmark']"></fa-icon>
+      </button>
+      <button
+        #fitnessTestBtn
+        type="submit"
+        [disabled]="fitnessTestForm.disabled"
+        class="btn btn-primary"
+      >
+        <fa-icon [icon]="['fas', 'check']"></fa-icon>
+      </button>
     </div>
   </form>
 </ng-template>

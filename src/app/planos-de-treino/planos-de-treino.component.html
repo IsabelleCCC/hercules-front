@@ -7,14 +7,24 @@
         <h2 class="mb-4">Planos de Treino</h2>
       </div>
       <div class="col-md-6 text-end mb-3">
-        <button type="button" class="btn btn-yellow" (click)="openModal(workoutPlanModal, null)"><fa-icon [icon]="['fas', 'plus']" class="me-2" style="color: #000;"></fa-icon>Adicionar</button>
+        <button
+          type="button"
+          class="btn btn-yellow"
+          (click)="openModal(workoutPlanModal, null)"
+        >
+          <fa-icon
+            [icon]="['fas', 'plus']"
+            class="me-2"
+            style="color: #000"
+          ></fa-icon
+          >Adicionar
+        </button>
       </div>
     </div>
     <div class="card">
       <div class="card-body">
         <div class="mb-3 px-2">
-
-          <div *ngIf="workoutPlanList.length > 0">
+          <div class="table-responsive" *ngIf="workoutPlanList.length > 0">
             <table class="table table-dark table-striped">
               <thead>
                 <tr>
@@ -28,15 +38,33 @@
               <tbody *ngFor="let workoutPlan of workoutPlanList">
                 <tr>
                   <th scope="row">{{ workoutPlan.name }}</th>
-                  <td>{{ workoutPlan.start_date }}</td>
-                  <td>{{ workoutPlan.end_date }}</td>
+                  <td>{{ workoutPlan.start_date | date : "dd/MM/yyyy" }}</td>
+                  <td>{{ workoutPlan.end_date | date : "dd/MM/yyyy" }}</td>
                   <td>Ativo</td>
                   <td>
-                    <button type="button" class="btn btn-yellow" (click)="openModal(workoutPlanModal, workoutPlan)">
+                    <button
+                      type="button"
+                      class="ms-2 mt-1 btn btn-yellow"
+                      (click)="openModal(workoutPlanModal, workoutPlan)"
+                    >
                       <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
                     </button>
-                    <button (click)="deleteWorkoutPlan($event, deleteWorkoutPlanBtn, workoutPlan.id)" #deleteWorkoutPlanBtn type="button" class="ms-2 btn btn-pink">
-                      <fa-icon [icon]="['fas', 'trash-can']" style="color: #fff"></fa-icon>
+                    <button
+                      (click)="
+                        deleteWorkoutPlan(
+                          $event,
+                          deleteWorkoutPlanBtn,
+                          workoutPlan.id
+                        )
+                      "
+                      #deleteWorkoutPlanBtn
+                      type="button"
+                      class="ms-2 mt-1 btn btn-pink"
+                    >
+                      <fa-icon
+                        [icon]="['fas', 'trash-can']"
+                        style="color: #fff"
+                      ></fa-icon>
                     </button>
                   </td>
                 </tr>
@@ -45,10 +73,9 @@
           </div>
 
           <div *ngIf="workoutPlanList.length == 0" class="text-center">
-            <img src="../../assets/workout.svg" style="max-width: 300px;"/>
+            <img src="../../assets/workout.svg" style="max-width: 300px" />
             <p class="fs-5 mt-2">Nenhum plano de treino ainda</p>
           </div>
-
         </div>
       </div>
     </div>
@@ -56,67 +83,142 @@
 </div>
 
 <ng-template #workoutPlanModal let-modal>
-  <form [formGroup]="workoutPlanForm" (submit)="submitWorkoutPlan()" class="modal-content">
+  <form
+    [formGroup]="workoutPlanForm"
+    (submit)="submitWorkoutPlan()"
+    class="modal-content"
+  >
     <div class="modal-header">
       <h1 class="modal-title fs-5">Inserir plano de treino</h1>
-      <button type="button" class="btn-close" (click)="modal.dismiss('Cross click')" aria-label="Close"></button>
+      <button
+        type="button"
+        class="btn-close"
+        (click)="modal.dismiss('Cross click')"
+        aria-label="Close"
+      ></button>
     </div>
     <div class="modal-body">
-
       <label for="name" class="form-label">Nome</label>
-      <input required formControlName="name" type="text" class="form-control" maxlength="45" placeholder="Nome do plano de treino">
+      <input
+        required
+        formControlName="name"
+        type="text"
+        class="form-control"
+        maxlength="45"
+        placeholder="Nome do plano de treino"
+      />
 
       <div class="row mb-3">
         <div class="col-sm-6 mt-3">
           <label for="max_weight" class="form-label">Data de Início</label>
-          <input formControlName="start_date" type="date" class="form-control">
+          <input
+            formControlName="start_date"
+            type="date"
+            class="form-control"
+          />
         </div>
         <div class="col-sm-6 mt-3">
           <label for="reps" class="form-label">Data Final</label>
-          <input formControlName="end_date" type="date" class="form-control">
+          <input formControlName="end_date" type="date" class="form-control" />
         </div>
       </div>
 
       <div class="text-center mb-3">
-        <button (click)="addExerciseWorkoutPlan()" type="button" class="btn btn-success">
-          <fa-icon (click)="addExercise()" [icon]="['fas', 'plus']" class="me-2"></fa-icon> Adicionar exercício
+        <button
+          (click)="addExerciseWorkoutPlan()"
+          type="button"
+          class="btn btn-success"
+        >
+          <fa-icon
+            (click)="addExercise()"
+            [icon]="['fas', 'plus']"
+            class="me-2"
+          ></fa-icon>
+          Adicionar exercício
         </button>
       </div>
 
-      <div *ngFor="let exercise of getExercisesWorkoutPlan().controls; let i = index" formArrayName="exercises_workout_plan" class="card bg-dark-1 px-3 pb-3 border-0 mb-3">
+      <div
+        *ngFor="
+          let exercise of getExercisesWorkoutPlan().controls;
+          let i = index
+        "
+        formArrayName="exercises_workout_plan"
+        class="card bg-dark-1 px-3 pb-3 border-0 mb-3"
+      >
         <div [formGroupName]="i">
           <div class="row">
             <div class="col-sm-6 mt-3">
               <label for="exercise" class="form-label">Exercício</label>
-              <select formControlName="exercise_id" class="form-select" aria-label="Selecionar exercício">
-                <option [selected]="index==0" [value]="exercise.id" *ngFor="let exercise of exerciseList; let index = index">{{ exercise.name }}</option>
+              <select
+                formControlName="exercise_id"
+                class="form-select"
+                aria-label="Selecionar exercício"
+              >
+                <option
+                  [selected]="index == 0"
+                  [value]="exercise.id"
+                  *ngFor="let exercise of exerciseList; let index = index"
+                >
+                  {{ exercise.name }}
+                </option>
               </select>
             </div>
             <div class="col-sm-6">
-              <label for="combination" class="form-label mt-3">Combinação</label>
-              <select formControlName="combination" class="form-select" aria-label="Selecionar combinação">
+              <label for="combination" class="form-label mt-3"
+                >Combinação</label
+              >
+              <select
+                formControlName="combination"
+                class="form-select"
+                aria-label="Selecionar combinação"
+              >
                 <option value="0" selected>Selecionar</option>
-                <option [value]="exercise.id" *ngFor="let exercise of exerciseList">{{ exercise.name }}</option>
+                <option
+                  [value]="exercise.id"
+                  *ngFor="let exercise of exerciseList"
+                >
+                  {{ exercise.name }}
+                </option>
               </select>
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6 mt-3">
               <label for="sets" class="form-label">Séries</label>
-              <input formControlName="sets" type="number" class="form-control" name="sets"
-                placeholder="Quantidade de séries">
+              <input
+                formControlName="sets"
+                type="number"
+                class="form-control"
+                name="sets"
+                placeholder="Quantidade de séries"
+              />
             </div>
             <div class="col-md-6 mt-3">
               <label for="reps" class="form-label">Repetições</label>
-              <input formControlName="reps" type="number" class="form-control" name="reps" placeholder="Número de repetições">
+              <input
+                formControlName="reps"
+                type="number"
+                class="form-control"
+                name="reps"
+                placeholder="Número de repetições"
+              />
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')"><fa-icon [icon]="['fas', 'xmark']"></fa-icon></button>
-      <button type="submit" class="btn btn-primary"><fa-icon [icon]="['fas', 'check']"></fa-icon></button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <fa-icon [icon]="['fas', 'xmark']"></fa-icon>
+      </button>
+      <button type="submit" class="btn btn-primary">
+        <fa-icon [icon]="['fas', 'check']"></fa-icon>
+      </button>
     </div>
   </form>
 </ng-template>
