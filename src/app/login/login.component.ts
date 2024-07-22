@@ -23,7 +23,7 @@ export class LoginComponent {
     private route: ActivatedRoute
   ) {
     this.loginForm = this.fb.group({
-      email: [
+      username: [
         null,
         [Validators.required, Validators.email, Validators.maxLength(180)],
       ],
@@ -49,7 +49,7 @@ export class LoginComponent {
     this.loginForm.disable();
 
     const body: LoginModel = {
-      email: this.loginFormControls['email'].value,
+      username: this.loginFormControls['username'].value,
       password: this.loginFormControls['password'].value,
     };
 

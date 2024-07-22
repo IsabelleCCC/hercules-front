@@ -61,7 +61,8 @@ export class AppModule {
       FontAwesomeRegular.faTrashCan,
       FontAwesomeSolid.faPencil,
       FontAwesomeSolid.faTrashCan,
-      FontAwesomeSolid.faPlus
+      FontAwesomeSolid.faPlus,
+      FontAwesomeRegular.faEye
     )
   }
  }

@@ -1,40 +1,27 @@
-export interface WorkoutPlan {
-	name: number
-	start_date: string
-	end_date: string
-	user_id: number
-	id: number
-  exercises_workout_plan: [
-    {
-      exercise_id: number,
-      sets: number,
-      reps: number,
-      combination: number | null
-    }
-  ]
-}
+import { ExercisePlan } from "./exercise-plan.model"
 
-export interface WorkoutPlanWithExerciseWorkoutPlan {
-	name: number
+export interface WorkoutPlan {
+	name: string
 	start_date: string
 	end_date: string
 	user_id: number
 	id: number
-  exercises_workout_plan: [
-    {
-      exercise_id: number,
-      sets: number,
-      reps: number,
-      combination: number | null
-    }
-  ]
+  exercise_plans: [ExercisePlan]
 }
 
 export interface InsertWorkoutPlan {
-	name: number
+	name: string
 	start_date: string
 	end_date: string
 	user_id: number
+  exercise_plans: [
+    {
+      exercise_id: number,
+      sets: number,
+      reps: number,
+      combination: number | null
+    }
+  ]
 }
 
 export interface DeleteWorkoutPlan {

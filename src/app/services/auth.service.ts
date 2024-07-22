@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { BearerTokenModel } from '../models/auth/bearer-token.model';
 import { LoginModel } from '../models/auth/login.model';
@@ -14,7 +14,15 @@ export class AuthService {
 	constructor(private http: HttpClient) {	}
 
 	login(command: LoginModel): Observable<BearerTokenModel> {
-		return this.http.post<BearerTokenModel>(`${environment.baseURI.api}/auth/login`, command);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+    });
+
+    const params = new HttpParams()
+      .set('username', command.username)
+      .set('password', command.password)
+
+		return this.http.post<BearerTokenModel>(`${environment.baseURI.api}/auth/login`, params, { headers });
 	}
 
   get userId() {

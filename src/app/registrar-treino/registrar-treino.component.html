@@ -14,7 +14,7 @@
             >Selecione o plano de treino</label
           >
           <select
-            (change)="listExerciseWorkoutPlan(selectWorkoutPlan.value)"
+            (change)="getWorkoutPlan(selectWorkoutPlan.value)"
             #selectWorkoutPlan
             formControlName="workoutPlan"
             class="form-select"
@@ -31,132 +31,131 @@
           </select>
         </form>
 
-        <h4>Exercícios</h4>
+        <form
+          *ngIf="exercises_done.controls.length > 0"
+          [formGroup]="workoutDoneForm"
+          id="workoutDoneForm"
+          (submit)="insertWorkoutDone(insertWorkoutDoneBtn)"
+        >
+          <div class="mb-3 row">
+            <div class="col">
+              <label for="date" class="form-label">Data</label>
+              <input type="date" class="form-control" formControlName="date" id="date" name="date">
+            </div>
+            <div class="col">
+              <label for="hour" class="form-label">Hora</label>
+              <input type="time" class="form-control" formControlName="hour" id="hour" name="hour">
+            </div>
+            <div class="col">
+              <label for="duration" class="form-label">Duração</label>
+              <input type="number" class="form-control" formControlName="duration" id="duration" name="duration" placeholder="em minutos" max="1440">
+            </div>
+          </div>
 
-        <div *ngIf="exerciseWorkoutPlanList.length > 0">
-          <div *ngFor="let exercise of exerciseWorkoutPlanList">
-            <div class="card bg-dark-1 mb-3 px-4 py-2 border-0">
+          <h4>Exercícios</h4>
+          <div *ngFor="let exercise of exercises_done.controls; let i = index" formArrayName="exercises_done">
+            <div class="card bg-dark-1 mb-3 px-4 py-2 border-0" [formGroupName]="i">
               <div class="row d-flex justify-content-between place-center">
-                <div class="col-3 exercise-img text-center">
-                  <fa-icon [icon]="['fas', 'dumbbell']"></fa-icon>
-                </div>
-                <h6 class="col">{{ exercise.exercise_name }}</h6>
-              </div>
+                <h6 class="col text-white">{{ exercise.value['exercise_name'] }}</h6>
 
-              <div class="row mt-2 d-flex justify-content-between place-center">
                 <div class="col">
-                  <span class="badge rounded-pill text-bg-warning px-3 py-2"
-                    >{{ exercise.sets }} séries</span
-                  >
+                  <span class="badge rounded-pill text-bg-warning px-3 py-2">
+                    <img src="../../assets/target-svgrepo-com.svg" style="max-width: 20px" /> {{ exercise.value['sets_number'] }} séries
+                  </span>
                 </div>
                 <div class="col">
-                  <span class="badge rounded-pill text-bg-warning px-3 py-2"
-                    >{{ exercise.reps }} repetições</span
+                  <span class="badge rounded-pill text-bg-warning px-3 py-2">
+                    <img src="../../assets/target-svgrepo-com.svg" style="max-width: 20px" /> {{ exercise.value['reps_number'] }} reps
+                  </span
                   >
                 </div>
                 <button
                   type="button"
                   class="col btn btn-success"
-                  (click)="openModalUpdate(update, exercise)"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#collapse-exercise-' + i"
+                  aria-expanded="false"
+                  [attr.aria-controls]="'collapse-exercise-' + i"
                 >
                   <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                  Editar
                 </button>
               </div>
+
+              <!-- Form sets: reps e carga máxima -->
+              <div class="collapse mt-2" [attr.id]="'collapse-exercise-' + i">
+                <div
+                  formArrayName="sets"
+                  class="p-2"
+                  *ngFor="let set of setsByExerciseDone(exercise).controls; let j = index;"
+                >
+                  <div class="card bg-dark-1 border-0 mb-2">
+                    <div class="d-flex justify-content-between">
+                      <h6 class="fw-bold">Série {{ j + 1 }}</h6>
+                      <fa-icon
+                        [icon]="['far', 'trash-can']"
+                        style="color: #fe5050"
+                        (click)="removeSerie(j, exercise)"
+                        role="button"
+                      ></fa-icon>
+                    </div>
+
+                    <div class="row" [formGroupName]="j">
+                      <div class="col-sm-6">
+                        <label for="reps" class="form-label">Repetições</label>
+                        <input
+                          type="number"
+                          min="0"
+                          formControlName="reps"
+                          class="form-control"
+                          name="reps"
+                          id="reps"
+                          placeholder="Número de repetições"
+                        />
+                      </div>
+                      <div class="col-sm-6">
+                        <label for="max_weight" class="form-label">Carga máxima</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="999"
+                          formControlName="max_weight"
+                          class="form-control"
+                          name="max_weight"
+                          id="max_weight"
+                          placeholder="Peso máximo em kg"
+                        />
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  <button type="button" class="mt-1 btn btn-success" (click)="addSet(exercise)">
+                    <fa-icon [icon]="['fas', 'plus']"></fa-icon> Adicionar série
+                  </button>
+                </div>
+
+              </div>
+
             </div>
           </div>
-        </div>
 
-        <div *ngIf="exerciseWorkoutPlanList.length == 0" class="text-center">
+          <div class="text-end">
+            <button type="submit" class="btn btn-primary" #insertWorkoutDoneBtn form="workoutDoneForm">
+              <fa-icon [icon]="['fas', 'check']"></fa-icon>
+            </button>
+          </div>
+
+        </form>
+
+        <div *ngIf="exercisePlanList.length == 0" class="text-center">
           <img src="../../assets/workout.svg" style="max-width: 300px" />
           <p class="fs-5 mt-2">Nenhum exercício por aqui</p>
         </div>
       </div>
+
     </div>
   </div>
 </div>
-
-<ng-template #update let-modal>
-  <form
-    [formGroup]="setsForm"
-    class="modal-content"
-    id="setsForm"
-    (submit)="insertWorkout(insertWorkoutBtn)"
-  >
-    <div class="modal-header">
-      <h1 class="modal-title fs-5" id="staticBackdropLabel">
-        {{ exerciseWorkoutPlan?.exercise_name }}
-      </h1>
-      <button
-        type="button"
-        class="btn-close"
-        (click)="modal.dismiss('Cross click')"
-        aria-label="Close"
-      ></button>
-    </div>
-    <div class="modal-body">
-      <div class="mb-4">
-        <div
-          formArrayName="setsArray"
-          *ngFor="let set of getSets().controls; let i = index"
-        >
-          <div class="card bg-dark-1 p-3 border-0 mb-3" [formGroupName]="i">
-            <div class="d-flex justify-content-between">
-              <h6 class="fw-bold">Série {{ i + 1 }}</h6>
-              <!-- <a href="#"
-                ><fa-icon
-                  [icon]="['far', 'trash-can']"
-                  style="color: #fe5050"
-                ></fa-icon
-              ></a> -->
-            </div>
-
-            <div class="row">
-              <div class="col-sm-6">
-                <label for="reps" class="form-label">Repetições</label>
-                <input
-                  type="number"
-                  min="0"
-                  formControlName="reps"
-                  class="form-control"
-                  name="reps"
-                  id="reps"
-                  placeholder="Número de repetições"
-                />
-              </div>
-              <div class="col-sm-6">
-                <label for="max_weight" class="form-label">Carga máxima</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="999"
-                  formControlName="max_weight"
-                  class="form-control"
-                  name="max_weight"
-                  id="max_weight"
-                  placeholder="Peso máximo em kg"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-secondary"
-        (click)="modal.dismiss('Cross click')"
-      >
-        <fa-icon [icon]="['fas', 'xmark']"></fa-icon>
-      </button>
-      <button
-        #insertWorkoutBtn
-        type="submit"
-        form="setsForm"
-        class="btn btn-primary"
-      >
-        <fa-icon [icon]="['fas', 'check']"></fa-icon>
-      </button>
-    </div>
-  </form>
-</ng-template>

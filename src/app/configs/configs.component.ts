@@ -72,6 +72,7 @@ export class ConfigsComponent {
       .subscribe({
         next: (response: User) => {
           Swal.fire('Sucesso', 'Alterações realizadas com sucesso.', 'success');
+          loading.remove();
         },
 
         error: (error: HttpErrorResponse) => {

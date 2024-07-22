@@ -4,7 +4,7 @@ import { ExerciseModel } from '../models/exercise.model';
 import { AuthService } from '../services/auth.service';
 import { ExerciseService } from '../services/exercise.service';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { WorkoutPlan, InsertWorkoutPlan, DeleteWorkoutPlan, WorkoutPlanWithExerciseWorkoutPlan } from '../models/workout-plan.model';
+import { WorkoutPlan, InsertWorkoutPlan, DeleteWorkoutPlan } from '../models/workout-plan.model';
 import { WorkoutPlanService } from '../services/workout-plan.service';
 import Swal from 'sweetalert2';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -42,7 +42,7 @@ export class PlanosDeTreinoComponent {
       end_date: ["", [
         Validators.required
       ]],
-      exercises_workout_plan: this.fb.array([])
+      exercise_plans: this.fb.array([])
     })
 
     this.exerciseService.listExercise().subscribe({
@@ -65,11 +65,11 @@ export class PlanosDeTreinoComponent {
 		this.modalService.open(content, { centered: true, scrollable: true });
 
     if (workoutPlan != null) {
-      workoutPlan.exercises_workout_plan.forEach((element) => {
+      workoutPlan.exercise_plans.forEach((element) => {
         if(element.combination == null) {
           element.combination = 0
         }
-        this.addExerciseWorkoutPlan()
+        this.addExercisePlan()
       });
       this.workoutPlanForm.patchValue(workoutPlan)
     }
@@ -78,10 +78,10 @@ export class PlanosDeTreinoComponent {
 	}
 
   getExercisesWorkoutPlan() {
-    return this.workoutPlanForm.get('exercises_workout_plan') as FormArray
+    return this.workoutPlanForm.get('exercise_plans') as FormArray
   }
 
-  addExerciseWorkoutPlan() {
+  addExercisePlan() {
     const group = this.fb.group({
       exercise_id: ["", [
         Validators.required,
@@ -128,14 +128,14 @@ export class PlanosDeTreinoComponent {
     this.workoutPlanForm.disable()
     this.workoutPlanForm.value['user_id'] = this.authService.userId
 
-    this.workoutPlanForm.value['exercises_workout_plan'].forEach((element:any) => {
+    this.workoutPlanForm.value['exercise_plans'].forEach((element:any) => {
       if(element.combination == "0") {
         element.combination = null
       }
     });
-    console.log(this.workoutPlanForm.value)
+
     this.workoutPlanService.insertWorkoutPlan(this.workoutPlanForm.value).subscribe({
-      next: (response: WorkoutPlanWithExerciseWorkoutPlan) => {
+      next: (response) => {
         Swal.fire({
           icon: "success",
           title: "Plano de treino inserido com sucesso"
