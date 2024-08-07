@@ -1,17 +1,16 @@
-import { Component, TemplateRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WorkoutPlan } from '../models/workout-plan.model';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { WorkoutPlanService } from '../services/workout-plan.service';
-import { ExerciseWorkoutPlan, ExerciseWorkoutPlanEdited } from '../models/exercise-workout-plan.model';
-import { ExerciseWorkoutPlanService } from '../services/exercise-workout-plan.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
-import { WorkoutModel } from '../models/workout.model';
-import { WorkoutService } from '../services/workout.service';
+import { WorkoutDoneModel } from '../models/workout-done.model';
+import { WorkoutDoneService } from '../services/workout-done.service';
 import { Toast } from '../helpers/toast';
 import { ButtonLoading } from '../helpers/button-loading';
+import { ExercisePlan } from '../models/exercise-plan.model';
 
 @Component({
   selector: 'app-registrar-treino',
@@ -27,16 +26,15 @@ import { ButtonLoading } from '../helpers/button-loading';
 })
 export class RegistrarTreinoComponent {
   public workoutPlanForm: FormGroup
-  public setsForm: FormGroup
+  public workoutDoneForm: FormGroup
 
   public workoutPlanList: WorkoutPlan[] = []
-  public exerciseWorkoutPlanList: ExerciseWorkoutPlanEdited[] = []
-  public exerciseWorkoutPlan?: ExerciseWorkoutPlanEdited
+  public exercisePlanList: ExercisePlan[] = []
 
   public Count = []
   closeResult?: string;
 
-  constructor(private modalService: NgbModal, private fb: FormBuilder, private authService: AuthService, private workoutPlanService: WorkoutPlanService, private exerciseWorkoutPlanService: ExerciseWorkoutPlanService, private workoutService: WorkoutService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private workoutPlanService: WorkoutPlanService, private workoutService: WorkoutDoneService) {
     this.workoutPlanForm = this.fb.group({
       workoutPlan: ["", [
         Validators.required,
@@ -44,64 +42,62 @@ export class RegistrarTreinoComponent {
       ]]
     })
 
-    this.setsForm = this.fb.group({
-      setsArray: this.fb.array([])
-    })
-
     this.workoutPlanService.listWorkoutPlan(this.authService.userId).subscribe({
       next: (response: WorkoutPlan[]) => {
         this.workoutPlanList = response
       }
     })
+
+    this.workoutDoneForm = this.fb.group({
+      date: ['', Validators.required],
+      hour: ['', Validators.required],
+      duration: ['', [Validators.required, Validators.max(1440)]],
+      exercises_done: this.fb.array([])
+    })
+
   }
 
-  listExerciseWorkoutPlan(id?: string) {
+  getWorkoutPlan(id?: string) {
+    this.workoutDoneForm.reset()
+    this.exercises_done.clear()
+    this.exercisePlanList = []
+
     if (!id) {
       return
     }
-    this.exerciseWorkoutPlanService.listExerciseWorkoutPlan(parseInt(id)).subscribe({
-      next: (response: ExerciseWorkoutPlan[]) => {
-        const groupedData: ExerciseWorkoutPlanEdited[] = [];
 
-        response.forEach((item) => {
-          const existingExercise = groupedData.find(
-            (exercise) => exercise.exercise_id === item.exercise_id
-          );
+    this.workoutPlanService.getWorkoutPlan(parseInt(id)).subscribe({
+      next: (response: WorkoutPlan) => {
+        response.exercise_plans.forEach((exercise) => {
+          this.exercisePlanList.push(exercise)
 
-          if (existingExercise) {
-            existingExercise.workout_list.push({
-              workout_id: item.workout_id,
-              workout_max_weight: item.workout_max_weight,
-              workout_reps: item.workout_reps,
-            });
-          } else {
-            const newExercise: ExerciseWorkoutPlanEdited = {
-              exercise_id: item.exercise_id,
-              exercise_name: item.exercise_name,
-              id: item.id,
-              reps: item.reps,
-              sets: item.sets,
-              workout_plan_id: item.workout_id,
-              combination: item.combination,
-              workout_list: [
-                {
-                  workout_id: item.workout_id,
-                  workout_max_weight: item.workout_max_weight,
-                  workout_reps: item.workout_reps,
-                },
-              ],
-            };
-            groupedData.push(newExercise);
+          const exerciseGroup = this.fb.group({
+            exercise_name: [exercise.exercise_name],
+            exercise_id: [exercise.id],
+            sets_number: [exercise.sets],
+            reps_number: [exercise.reps],
+            sets: this.fb.array([])
+          })
+
+          const sets = exerciseGroup.get('sets') as FormArray
+
+          for (let i = 0; i < exercise.sets; i++) {
+            const setsGroup = this.fb.group({
+              reps: [exercise.reps, Validators.required],
+              max_weight: ['', Validators.required],
+            })
+
+            sets.push(setsGroup)
           }
-        });
 
-        this.exerciseWorkoutPlanList = groupedData
+          this.exercises_done.push(exerciseGroup);
+        })
       },
 
       error: (error: HttpErrorResponse) => {
         switch (error.error.detail) {
           case "Nenhum registro associado a esse plano de treino.":
-            this.exerciseWorkoutPlanList = []
+            this.workoutDoneForm.reset()
             Toast.fire({
               icon: 'question',
               title: 'Nenhum registro associado a esse plano de treino.'
@@ -119,54 +115,80 @@ export class RegistrarTreinoComponent {
     })
   }
 
-  openModalUpdate(content: TemplateRef<any>, exercise_clicked: ExerciseWorkoutPlanEdited) {
-		this.modalService.open(content, { centered: true, scrollable: true });
-    this.exerciseWorkoutPlan = exercise_clicked
-    let control = this.getSets()
-    control.controls = []
-
-    if (this.exerciseWorkoutPlan.workout_list[0].workout_id != null) {
-      for (let index = 0; index < this.exerciseWorkoutPlan.workout_list.length; index++) {
-        const element = this.exerciseWorkoutPlan.workout_list[index]
-
-        const setGroup = this.fb.group({
-          reps: [element.workout_reps, [
-            Validators.required,
-            Validators.min(1)
-          ]],
-          max_weight: [element.workout_max_weight, [
-            Validators.required,
-            Validators.min(1)
-          ]]
-        })
-        control.push(setGroup)
-      }
-    } else {
-      for (let index = 0; index < exercise_clicked.sets; index++) {
-        const setGroup = this.fb.group({
-          reps: ["", [
-            Validators.required,
-            Validators.min(1)
-          ]],
-          max_weight: ["", [
-            Validators.required,
-            Validators.min(1)
-          ]]
-        })
-        control.push(setGroup)
-      }
-    }
-	}
-
-  getSets() {
-    return this.setsForm.get('setsArray') as FormArray
+  setsByExerciseDone(control: AbstractControl): FormArray {
+    return control.get('sets') as FormArray
   }
 
-  insertWorkout(button: HTMLButtonElement): void {
-    const loading = new ButtonLoading(button);
-    this.setsForm.markAllAsTouched()
+  get exercises_done(): FormArray {
+    return this.workoutDoneForm.get('exercises_done') as FormArray
+  }
 
-    if (this.setsForm.invalid) {
+  addSet(control: AbstractControl) {
+    const sets = control.get('sets') as FormArray
+
+    if (sets.length >= 30) {
+      return
+    }
+
+    const setsGroup = this.fb.group({
+      reps: [control.value['reps_number'], Validators.required],
+      max_weight: ['', Validators.required],
+    })
+
+    sets.push(setsGroup)
+  }
+
+  removeSerie(index: number, control: AbstractControl) {
+    const sets = control.get('sets') as FormArray
+
+    sets.removeAt(index);
+  }
+
+  getSetsArray(sets: number) {
+    return new Array(sets)
+  }
+
+  createDateTimeObj(date: string, time: string) {
+    let concatDateTime = `${date}T${time}`
+    let dateTime: Date = new Date(concatDateTime);
+    return dateTime
+  }
+
+  insertWorkoutDone(button: HTMLButtonElement): void {
+    const exercises_done = this.workoutDoneForm.value.exercises_done
+
+    let format_exercises_done: any = []
+
+    exercises_done.forEach((exercise: any) => {
+
+      exercise.sets.forEach((set: any) => {
+
+        format_exercises_done.push({
+          reps: set.reps,
+          max_weight: set.max_weight,
+          exercise_plan_id: exercise.exercise_id
+        })
+
+      })
+    });
+
+    var workoutDatetime = this.createDateTimeObj(
+      this.workoutDoneForm.value.date,
+      this.workoutDoneForm.value.hour
+    )
+
+    const body: WorkoutDoneModel = {
+      datetime: workoutDatetime,
+      duration: this.workoutDoneForm.value.duration,
+      workout_plan_id: this.exercisePlanList[0].workout_plan_id,
+      exercises_done: format_exercises_done
+    }
+
+
+    const loading = new ButtonLoading(button);
+    this.workoutDoneForm.markAllAsTouched()
+
+    if (this.workoutDoneForm.invalid) {
       Swal.fire(
         "Ocorreu um erro",
         "Valores inseridos inválidos.",
@@ -176,26 +198,14 @@ export class RegistrarTreinoComponent {
       return
     }
 
-    this.setsForm.disable()
+    this.workoutDoneForm.disable()
 
-    let bodyList: WorkoutModel[] = []
-
-    this.setsForm.value['setsArray'].forEach((setInfo: any) => {
-      let body: WorkoutModel = {
-		    workout_exercise_id: this.exerciseWorkoutPlan!.id,
-        reps: setInfo.reps,
-		    max_weight: setInfo.max_weight
-      }
-
-      bodyList.push(body)
-    })
-
-    this.workoutService.insertWorkout(bodyList).subscribe({
-      next: (response: WorkoutModel[]) => {
+    this.workoutService.insertWorkoutDone(body).subscribe({
+      next: (response) => {
         Swal.fire({
           icon: "success",
-          title: "Exercício inserido"
-        }).then(() => this.modalService.dismissAll())
+          title: "Treino realizado com sucesso"
+        })
       },
 
       error: (error: HttpErrorResponse) => {
@@ -212,7 +222,7 @@ export class RegistrarTreinoComponent {
       }
 
     }).add(() => {
-      this.setsForm.enable()
+      this.workoutDoneForm.enable()
       loading.remove()
     })
   }

@@ -20,6 +20,9 @@ import { RegistrarTreinoComponent } from './registrar-treino/registrar-treino.co
 import { ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpInterceptorService } from './services/http-interceptor.service';
+import { ProgressoPesoComponent } from './charts/progresso-peso/progresso-peso.component';
+import {NgChartsModule} from 'ng2-charts';
+import { GrupoMuscularComponent } from './charts/grupo-muscular/grupo-muscular.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,9 @@ import { HttpInterceptorService } from './services/http-interceptor.service';
     ConfigsComponent,
     AvaliacaoFisicaComponent,
     PlanosDeTreinoComponent,
-    RegistrarTreinoComponent
+    RegistrarTreinoComponent,
+    ProgressoPesoComponent,
+    GrupoMuscularComponent
   ],
   imports: [
     BrowserModule,
@@ -40,10 +45,11 @@ import { HttpInterceptorService } from './services/http-interceptor.service';
     NgbModule,
     SweetAlert2Module.forRoot(),
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgChartsModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true}
+    {provide: HTTP_INTERCEPTORS,useClass: HttpInterceptorService, multi: true},
   ],
   bootstrap: [AppComponent]
 })
@@ -61,7 +67,8 @@ export class AppModule {
       FontAwesomeRegular.faTrashCan,
       FontAwesomeSolid.faPencil,
       FontAwesomeSolid.faTrashCan,
-      FontAwesomeSolid.faPlus
+      FontAwesomeSolid.faPlus,
+      FontAwesomeRegular.faEye
     )
   }
  }

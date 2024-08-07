@@ -125,7 +125,7 @@
 
       <div class="text-center mb-3">
         <button
-          (click)="addExerciseWorkoutPlan()"
+          (click)="addExercisePlan()"
           type="button"
           class="btn btn-success"
         >
@@ -143,7 +143,7 @@
           let exercise of getExercisesWorkoutPlan().controls;
           let i = index
         "
-        formArrayName="exercises_workout_plan"
+        formArrayName="exercise_plans"
         class="card bg-dark-1 px-3 pb-3 border-0 mb-3"
       >
         <div [formGroupName]="i">
