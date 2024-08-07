@@ -1,7 +1,7 @@
 import { Component, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
-import { WorkoutDoneWithName } from '../models/workout-done.model';
+import { WorkoutDonePagination, WorkoutDoneWithName } from '../models/workout-done.model';
 import { WorkoutDoneService } from '../services/workout-done.service';
 import { AuthService } from '../services/auth.service';
 import { DateTime } from 'luxon';
@@ -16,6 +16,10 @@ export class HomeComponent {
   closeResult?: string;
 
   public workoutDoneList: WorkoutDoneWithName[] = []
+  public skip: number = 0
+  public limit: number = 5
+  public pages: number[] = []
+  public currentPage: number = 1;
 
   constructor(
     private offcanvasService: NgbOffcanvas,
@@ -25,10 +29,13 @@ export class HomeComponent {
     private authService: AuthService
   ) {
 
-    this.workoutDoneService.listWorkoutsDone(this.authService.userId).subscribe({
-      next: (response: WorkoutDoneWithName[]) => {
+    this.workoutDoneService.listWorkoutsDone(this.authService.userId, this.skip, this.limit).subscribe({
+      next: (response: WorkoutDonePagination) => {
+		    let count_pages = Math.ceil(response.count / this.limit)
 
-        this.workoutDoneList = response.map(workout => {
+        this.pages = Array.from({ length: count_pages }, (_, i) => i + 1);
+
+        this.workoutDoneList = response['workouts_done'].map(workout => {
           const localDate = this.convertToLocalDatetime(workout.datetime)
           return {
             ...workout,
@@ -51,4 +58,47 @@ export class HomeComponent {
   goToPage(pageName:string){
     this.router.navigate([`${pageName}`]);
   }
+
+  loadWorkouts(action: any){
+    if (action == 'next') {
+      this.skip += this.limit
+
+      if (this.currentPage < this.pages.length) {
+        this.currentPage++;
+      }
+    } else if (action == 'previous') {
+      this.skip -= this.limit
+
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    } else {
+      this.currentPage = action
+      this.skip = (action - 1) * this.limit;
+    }
+
+    this.workoutDoneService.listWorkoutsDone(this.authService.userId, this.skip, this.limit).subscribe({
+      next: (response: WorkoutDonePagination) => {
+        this.workoutDoneList.pop()
+
+        this.workoutDoneList = response.workouts_done.map(workout => {
+          const localDate = this.convertToLocalDatetime(workout.datetime)
+          return {
+            ...workout,
+            datetime: localDate
+          };
+        });
+      }
+      })
+    }
+
+  isDisabled(page: string | number): boolean {
+    if (page === 'previous') {
+      return this.currentPage === 1;
+    } else if (page === 'next') {
+      return this.currentPage === this.pages.length;
+    }
+    return false;
+  }
+
 }

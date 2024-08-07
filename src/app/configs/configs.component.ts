@@ -34,7 +34,6 @@ export class ConfigsComponent {
     this.userService.get(this.authService.userId).subscribe({
       next: (response: User) => {
         this.userForm.patchValue(response);
-        console.log(response);
       },
     });
   }
@@ -83,7 +82,6 @@ export class ConfigsComponent {
               break;
             default:
               loading.remove();
-              console.log(error);
               Swal.fire(
                 'Ocorreu um erro',
                 'Algo inesperado aconteceu, tente novamente mais tarde.',

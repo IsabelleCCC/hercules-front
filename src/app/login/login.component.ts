@@ -73,7 +73,6 @@ export class LoginComponent {
               break;
             default:
               loading.remove();
-              console.log(error);
               Swal.fire(
                 'Ocorreu um erro',
                 'Algo inesperado aconteceu, tente novamente mais tarde.',

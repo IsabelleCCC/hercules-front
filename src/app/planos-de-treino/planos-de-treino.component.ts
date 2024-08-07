@@ -161,7 +161,7 @@ export class PlanosDeTreinoComponent {
   }
 
   updateWorkoutPlan() {
-    console.log('abuble')
+    return
   }
 
   setPage() {
